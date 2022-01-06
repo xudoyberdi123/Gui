@@ -1,0 +1,6 @@
+# for postgres db
+
+    create user gui_user with password 'root';
+    create database gui_db owner gui_user;
+
+#

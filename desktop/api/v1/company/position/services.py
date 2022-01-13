@@ -6,6 +6,7 @@ from django.conf import settings
 
 from base.db import dictfetchall, dictfetchone
 from base.sqlpaginator import SqlPaginator
+from company import PositionChoice
 
 PER_PAGE = settings.PAGINATE_BY
 
@@ -18,7 +19,9 @@ def get_list(request):
     offset = (page - 1) * PER_PAGE
 
     extra_sql = """
-   
+    select id, title, status  from company_position 
+    where status=2
+    limit %s offset %s
 """
     with closing(connection.cursor()) as cursor:
         cursor.execute(extra_sql, [PER_PAGE, offset])
@@ -29,7 +32,7 @@ def get_list(request):
 
     with closing(connection.cursor()) as cursor:
         cursor.execute(
-            "SELECT count(1) as cnt FROM company_member")
+            "SELECT count(1) as cnt FROM company_position where status=2")
         row = dictfetchone(cursor)
 
     if row:
@@ -47,7 +50,8 @@ def get_list(request):
 
 def get_one(request, root_id):
     extra_sql = """
-    
+    select id, title, status  from company_position 
+    where status=2 and id=%s
 
 """
     with closing(connection.cursor()) as cursor:
@@ -63,8 +67,13 @@ def get_one(request, root_id):
 
 
 def _format(data):
+    if data["status"]:
+        status = PositionChoice.getValue(data["status"])
+    else:
+        status = None
+
     return OrderedDict([
         ('id', data['id']),
-        ('name', data['name']),
-        ('ordering', data['ordering'])
+        ('title', data['title']),
+        ('status', status)
     ])

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from company.models import Member
+from company.models import Position
 
 
-class MemberSerializer(serializers.ModelSerializer):
+class PositionSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Member
+        models = Position
         fields = "__all__"
 
 

@@ -18,7 +18,13 @@ def get_list(request):
     offset = (page - 1) * PER_PAGE
 
     extra_sql = """
-   
+    select gr.id, gr.active_status, gr.joined_date, gr.leave_date, 
+    st.firstname, st.lastname, st.middlename, gruop."name" 
+    from education_groupstudent gr
+    left join education_group gruop on gruop.id = gr.group_id
+    left join company_member st on st.id = gr.student_id 
+    where gr.active_status=2
+    limit %s offset %S
 """
     with closing(connection.cursor()) as cursor:
         cursor.execute(extra_sql, [PER_PAGE, offset])
@@ -29,7 +35,7 @@ def get_list(request):
 
     with closing(connection.cursor()) as cursor:
         cursor.execute(
-            "SELECT count(1) as cnt FROM company_member")
+            "SELECT count(1) as cnt FROM education_groupstudent where active_status=2 ")
         row = dictfetchone(cursor)
 
     if row:
@@ -48,7 +54,13 @@ def get_list(request):
 def get_one(request, root_id):
     extra_sql = """
     
-
+    select gr.id, gr.active_status, gr.joined_date, gr.leave_date, 
+    st.firstname, st.lastname, st.middlename, gruop."name" 
+    from education_groupstudent gr
+    left join education_group gruop on gruop.id = gr.group_id
+    left join company_member st on st.id = gr.student_id 
+    where active_status=2 and id=%s
+ 
 """
     with closing(connection.cursor()) as cursor:
         cursor.execute(extra_sql, [root_id])

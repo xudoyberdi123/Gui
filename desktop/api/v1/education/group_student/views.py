@@ -4,18 +4,19 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from api.v1.company.member.services import get_one, get_list
-from company.models import Member
-from .serializer import MemberSerializer
+
+from education.models import GroupStudent
+from .serializer import GrSerializer
+from .services import get_one, get_list
 
 
-class MemberView(GenericAPIView):
-    serializer_class = MemberSerializer
+class GrView(GenericAPIView):
+    serializer_class = GrSerializer
     permission_classes = (AllowAny, )
 
     def get_object(self, *args, **kwargs):
         try:
-            product = Member.objects.get(id=kwargs['pk'])
+            product = GroupStudent.objects.get(id=kwargs['pk'])
         except Exception as e:
             raise NotFound('not found region')
         return product

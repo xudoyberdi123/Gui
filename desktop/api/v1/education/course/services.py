@@ -18,7 +18,9 @@ def get_list(request):
     offset = (page - 1) * PER_PAGE
 
     extra_sql = """
-   
+    select id, name, lang, price 
+    from education_course
+    limit %s offset %s
 """
     with closing(connection.cursor()) as cursor:
         cursor.execute(extra_sql, [PER_PAGE, offset])
@@ -29,7 +31,7 @@ def get_list(request):
 
     with closing(connection.cursor()) as cursor:
         cursor.execute(
-            "SELECT count(1) as cnt FROM company_member")
+            "SELECT count(1) as cnt FROM education_course")
         row = dictfetchone(cursor)
 
     if row:
@@ -47,7 +49,9 @@ def get_list(request):
 
 def get_one(request, root_id):
     extra_sql = """
-    
+    select id, name, lang, price 
+    from education_course
+    where id=%s
 
 """
     with closing(connection.cursor()) as cursor:
@@ -66,5 +70,6 @@ def _format(data):
     return OrderedDict([
         ('id', data['id']),
         ('name', data['name']),
-        ('ordering', data['ordering'])
+        ('lang', data['lang']),
+        ('price', data['price'])
     ])

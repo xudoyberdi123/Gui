@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from company.models import Member
+from education.models import GroupStudent
 
 
-class MemberSerializer(serializers.ModelSerializer):
+class GrSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Member
+        models = GroupStudent
         fields = "__all__"
 
 

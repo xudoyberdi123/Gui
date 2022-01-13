@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from company.models import Member
+from education.models import Course
 
 
-class MemberSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Member
+        models = Course
         fields = "__all__"
 
 
